@@ -1,4 +1,5 @@
 import { draw_body, draw_head } from './snake.js';
+import { draw_apple, get_random_apple_position } from './apple.js';
 const canvas = document.querySelector('#game-board');
 const ctx = canvas.getContext('2d');
 const scoreBoard = document.querySelector('#score span');
@@ -12,6 +13,7 @@ let snake_position = {
 	x_position: 200,
 	y_position: 200,
 };
+
 let is_game_over = true;
 let score = 0;
 
@@ -24,15 +26,6 @@ let apple = {
 	x: 0,
 	y: 0,
 };
-
-// class SnakeBodySegment {
-// 	constructor(body_position_x, body_position_y, GRID_SIZE) {
-// 		this.body_position_x = body_position_x;
-// 		this.body_position_y = body_position_y;
-// 		this.width = GRID_SIZE;
-// 		this.height = GRID_SIZE;
-// 	}
-// }
 
 let snakeBody = [];
 
@@ -99,124 +92,40 @@ const draw_game_over = () => {
 	);
 };
 
-// const buildBody = () => {
-// 	const snakeSegment = new SnakeBodySegment(
-// 		snake_position_x,
-// 		snake_position_y,
-// 		GRID_SIZE
-// 	);
-// 	return snakeBody.unshift(snakeSegment);
-// };
-
-// const draw_body = () => {
-// 	buildBody();
-// 	snakeBody.forEach((elem) => {
-// 		ctx.fillStyle = 'rgb(221, 161, 94)';
-// 		ctx.fillRect(
-// 			elem.body_position_x,
-// 			elem.body_position_y,
-// 			elem.width,
-// 			elem.height
-// 		);
-// 		ctx.strokeStyle = 'rgb(241, 201, 114)';
-// 		ctx.lineWidth = 1;
-// 		ctx.strokeRect(
-// 			elem.body_position_x,
-// 			elem.body_position_y,
-// 			elem.width,
-// 			elem.height
-// 		);
-// 	});
-// 	if (snakeBody.length > snake.length) snakeBody.pop();
-// };
-
-// const draw_head = () => {
-// 	if (
-// 		snake_position_x % GRID_SIZE === 0 &&
-// 		snake_position_y % GRID_SIZE === 0
-// 	) {
-// 		getDirection();
-// 	}
-// 	ctx.fillStyle = 'rgb(221, 161, 94)';
-// 	ctx.fillRect(
-// 		(snake_position_x += snake.speed * snake.direction_x),
-// 		(snake_position_y += snake.speed * snake.direction_y),
-// 		GRID_SIZE,
-// 		GRID_SIZE
-// 	);
-// 	ctx.strokeStyle = 'rgb(241, 201, 114)';
-// 	ctx.lineWidth = 1;
-// 	ctx.strokeRect(snake_position_x, snake_position_y, GRID_SIZE, GRID_SIZE);
-// };
-
-// const getDirection = () => {
-// 	window.addEventListener('keydown', (e) => {
-// 		switch (e.code) {
-// 			case 'ArrowUp':
-// 				snake.direction_x = 0;
-// 				if (snake.direction_y === 1) {
-// 					return;
-// 				} else snake.direction_y = -1;
-// 				break;
-// 			case 'ArrowDown':
-// 				snake.direction_x = 0;
-// 				if (snake.direction_y === -1) {
-// 					return;
-// 				} else snake.direction_y = 1;
-// 				break;
-// 			case 'ArrowLeft':
-// 				snake.direction_y = 0;
-// 				if (snake.direction_x === 1) {
-// 					return;
-// 				} else snake.direction_x = -1;
-// 				break;
-// 			case 'ArrowRight':
-// 				snake.direction_y = 0;
-// 				if (snake.direction_x === -1) {
-// 					return;
-// 				} else snake.direction_x = 1;
-// 				break;
-// 			default:
-// 				console.log('Ignored');
-// 				break;
+// const draw_apple = () => {
+// 	snakeBody.forEach(({ body_position_x, body_position_y }) => {
+// 		if (apple.x === body_position_x && apple.y === body_position_y) {
+// 			get_random_apple_position();
+// 		} else {
+// 			ctx.fillStyle = 'red';
+// 			ctx.strokeStyle = 'red';
+// 			ctx.beginPath();
+// 			ctx.arc(
+// 				apple.x + GRID_SIZE / 2,
+// 				apple.y + GRID_SIZE / 2,
+// 				GRID_SIZE / 2,
+// 				0,
+// 				2 * Math.PI,
+// 				true
+// 			);
+// 			ctx.stroke();
+// 			ctx.fill();
 // 		}
 // 	});
 // };
 
-const draw_apple = () => {
-	snakeBody.forEach(({ body_position_x, body_position_y }) => {
-		if (apple.x === body_position_x && apple.y === body_position_y) {
-			get_random_apple_position();
-		} else {
-			ctx.fillStyle = 'red';
-			ctx.strokeStyle = 'red';
-			ctx.beginPath();
-			ctx.arc(
-				apple.x + GRID_SIZE / 2,
-				apple.y + GRID_SIZE / 2,
-				GRID_SIZE / 2,
-				0,
-				2 * Math.PI,
-				true
-			);
-			ctx.stroke();
-			ctx.fill();
-		}
-	});
-};
-
-const get_random_apple_position = () => {
-	apple.x = Math.floor(Math.random() * (canvas.width / GRID_SIZE)) * GRID_SIZE;
-	apple.y = Math.floor(Math.random() * (canvas.height / GRID_SIZE)) * GRID_SIZE;
-	if (
-		apple.x < GRID_SIZE ||
-		apple.x === canvas.width - GRID_SIZE ||
-		apple.y < GRID_SIZE ||
-		apple.y === canvas.height - GRID_SIZE
-	) {
-		get_random_apple_position();
-	}
-};
+// const get_random_apple_position = () => {
+// 	apple.x = Math.floor(Math.random() * (canvas.width / GRID_SIZE)) * GRID_SIZE;
+// 	apple.y = Math.floor(Math.random() * (canvas.height / GRID_SIZE)) * GRID_SIZE;
+// 	if (
+// 		apple.x < GRID_SIZE ||
+// 		apple.x === canvas.width - GRID_SIZE ||
+// 		apple.y < GRID_SIZE ||
+// 		apple.y === canvas.height - GRID_SIZE
+// 	) {
+// 		get_random_apple_position();
+// 	}
+// };
 
 const boundary_check = () => {
 	if (
@@ -238,7 +147,7 @@ const apple_check = () => {
 		snake_position.x_position === apple.x &&
 		snake_position.y_position === apple.y
 	) {
-		get_random_apple_position();
+		get_random_apple_position(apple, canvas);
 		snake.length += 1;
 		score++;
 		scoreBoard.textContent = `SCORE: ${score}`;
@@ -304,7 +213,7 @@ const playGame = () => {
 	console.log(draw_head, draw_body);
 	setInterval(function () {
 		draw_game_board();
-		draw_apple();
+		draw_apple(ctx, apple, snakeBody, canvas);
 		draw_body(ctx, snake, snakeBody, snake_position);
 		draw_head(ctx, snake, snakeBody, snake_position);
 		boundary_check();
@@ -312,12 +221,12 @@ const playGame = () => {
 		body_check();
 		check_game_over();
 	}, 1000 / FRAMES_PER_SECOND);
-	get_random_apple_position();
+	get_random_apple_position(apple, canvas);
 };
 
 window.onload = () => {
 	createLocalStorage();
 	draw_game_board();
 	draw_game_over();
-	display_last_round_score();
+	display_last_round_score(apple, canvas);
 };
