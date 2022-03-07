@@ -1,3 +1,4 @@
+import { draw_body, draw_head } from './snake.js';
 const canvas = document.querySelector('#game-board');
 const ctx = canvas.getContext('2d');
 const scoreBoard = document.querySelector('#score span');
@@ -7,8 +8,10 @@ const savedScore = JSON.parse(localStorage.getItem('scoreLocalStorage'));
 const FRAMES_PER_SECOND = 10;
 const GRID_SIZE = 20;
 
-let snake_position_x = 200;
-let snake_position_y = 200;
+let snake_position = {
+	x_position: 200,
+	y_position: 200,
+};
 let is_game_over = true;
 let score = 0;
 
@@ -22,14 +25,14 @@ let apple = {
 	y: 0,
 };
 
-class SnakeBodySegment {
-	constructor(body_position_x, body_position_y, GRID_SIZE) {
-		this.body_position_x = body_position_x;
-		this.body_position_y = body_position_y;
-		this.width = GRID_SIZE;
-		this.height = GRID_SIZE;
-	}
-}
+// class SnakeBodySegment {
+// 	constructor(body_position_x, body_position_y, GRID_SIZE) {
+// 		this.body_position_x = body_position_x;
+// 		this.body_position_y = body_position_y;
+// 		this.width = GRID_SIZE;
+// 		this.height = GRID_SIZE;
+// 	}
+// }
 
 let snakeBody = [];
 
@@ -96,89 +99,89 @@ const draw_game_over = () => {
 	);
 };
 
-const buildBody = () => {
-	const snakeSegment = new SnakeBodySegment(
-		snake_position_x,
-		snake_position_y,
-		GRID_SIZE
-	);
-	return snakeBody.unshift(snakeSegment);
-};
+// const buildBody = () => {
+// 	const snakeSegment = new SnakeBodySegment(
+// 		snake_position_x,
+// 		snake_position_y,
+// 		GRID_SIZE
+// 	);
+// 	return snakeBody.unshift(snakeSegment);
+// };
 
-const draw_body = () => {
-	buildBody();
-	snakeBody.forEach((elem) => {
-		ctx.fillStyle = 'rgb(221, 161, 94)';
-		ctx.fillRect(
-			elem.body_position_x,
-			elem.body_position_y,
-			elem.width,
-			elem.height
-		);
-		ctx.strokeStyle = 'rgb(241, 201, 114)';
-		ctx.lineWidth = 1;
-		ctx.strokeRect(
-			elem.body_position_x,
-			elem.body_position_y,
-			elem.width,
-			elem.height
-		);
-	});
-	if (snakeBody.length > snake.length) snakeBody.pop();
-};
+// const draw_body = () => {
+// 	buildBody();
+// 	snakeBody.forEach((elem) => {
+// 		ctx.fillStyle = 'rgb(221, 161, 94)';
+// 		ctx.fillRect(
+// 			elem.body_position_x,
+// 			elem.body_position_y,
+// 			elem.width,
+// 			elem.height
+// 		);
+// 		ctx.strokeStyle = 'rgb(241, 201, 114)';
+// 		ctx.lineWidth = 1;
+// 		ctx.strokeRect(
+// 			elem.body_position_x,
+// 			elem.body_position_y,
+// 			elem.width,
+// 			elem.height
+// 		);
+// 	});
+// 	if (snakeBody.length > snake.length) snakeBody.pop();
+// };
 
-const draw_head = () => {
-	if (
-		snake_position_x % GRID_SIZE === 0 &&
-		snake_position_y % GRID_SIZE === 0
-	) {
-		getDirection();
-	}
-	ctx.fillStyle = 'rgb(221, 161, 94)';
-	ctx.fillRect(
-		(snake_position_x += snake.speed * snake.direction_x),
-		(snake_position_y += snake.speed * snake.direction_y),
-		GRID_SIZE,
-		GRID_SIZE
-	);
-	ctx.strokeStyle = 'rgb(241, 201, 114)';
-	ctx.lineWidth = 1;
-	ctx.strokeRect(snake_position_x, snake_position_y, GRID_SIZE, GRID_SIZE);
-};
+// const draw_head = () => {
+// 	if (
+// 		snake_position_x % GRID_SIZE === 0 &&
+// 		snake_position_y % GRID_SIZE === 0
+// 	) {
+// 		getDirection();
+// 	}
+// 	ctx.fillStyle = 'rgb(221, 161, 94)';
+// 	ctx.fillRect(
+// 		(snake_position_x += snake.speed * snake.direction_x),
+// 		(snake_position_y += snake.speed * snake.direction_y),
+// 		GRID_SIZE,
+// 		GRID_SIZE
+// 	);
+// 	ctx.strokeStyle = 'rgb(241, 201, 114)';
+// 	ctx.lineWidth = 1;
+// 	ctx.strokeRect(snake_position_x, snake_position_y, GRID_SIZE, GRID_SIZE);
+// };
 
-const getDirection = () => {
-	window.addEventListener('keydown', (e) => {
-		switch (e.code) {
-			case 'ArrowUp':
-				snake.direction_x = 0;
-				if (snake.direction_y === 1) {
-					return;
-				} else snake.direction_y = -1;
-				break;
-			case 'ArrowDown':
-				snake.direction_x = 0;
-				if (snake.direction_y === -1) {
-					return;
-				} else snake.direction_y = 1;
-				break;
-			case 'ArrowLeft':
-				snake.direction_y = 0;
-				if (snake.direction_x === 1) {
-					return;
-				} else snake.direction_x = -1;
-				break;
-			case 'ArrowRight':
-				snake.direction_y = 0;
-				if (snake.direction_x === -1) {
-					return;
-				} else snake.direction_x = 1;
-				break;
-			default:
-				console.log('Ignored');
-				break;
-		}
-	});
-};
+// const getDirection = () => {
+// 	window.addEventListener('keydown', (e) => {
+// 		switch (e.code) {
+// 			case 'ArrowUp':
+// 				snake.direction_x = 0;
+// 				if (snake.direction_y === 1) {
+// 					return;
+// 				} else snake.direction_y = -1;
+// 				break;
+// 			case 'ArrowDown':
+// 				snake.direction_x = 0;
+// 				if (snake.direction_y === -1) {
+// 					return;
+// 				} else snake.direction_y = 1;
+// 				break;
+// 			case 'ArrowLeft':
+// 				snake.direction_y = 0;
+// 				if (snake.direction_x === 1) {
+// 					return;
+// 				} else snake.direction_x = -1;
+// 				break;
+// 			case 'ArrowRight':
+// 				snake.direction_y = 0;
+// 				if (snake.direction_x === -1) {
+// 					return;
+// 				} else snake.direction_x = 1;
+// 				break;
+// 			default:
+// 				console.log('Ignored');
+// 				break;
+// 		}
+// 	});
+// };
 
 const draw_apple = () => {
 	snakeBody.forEach(({ body_position_x, body_position_y }) => {
@@ -216,16 +219,25 @@ const get_random_apple_position = () => {
 };
 
 const boundary_check = () => {
-	if (snake_position_x < 0 || snake_position_x === canvas.width) {
+	if (
+		snake_position.x_position < 0 ||
+		snake_position.x_position === canvas.width
+	) {
 		is_game_over = true;
 	}
-	if (snake_position_y < 0 || snake_position_y === canvas.height) {
+	if (
+		snake_position.y_position < 0 ||
+		snake_position.y_position === canvas.height
+	) {
 		is_game_over = true;
 	}
 };
 
 const apple_check = () => {
-	if (snake_position_x === apple.x && snake_position_y === apple.y) {
+	if (
+		snake_position.x_position === apple.x &&
+		snake_position.y_position === apple.y
+	) {
 		get_random_apple_position();
 		snake.length += 1;
 		score++;
@@ -238,8 +250,8 @@ const body_check = () => {
 		if (snake.direction_x === 0 && snake.direction_y === 0) {
 			return;
 		} else if (
-			snake_position_y === body_position_y &&
-			snake_position_x === body_position_x
+			snake_position.x_position === body_position_y &&
+			snake_position.y_position === body_position_x
 		) {
 			is_game_over = true;
 		}
@@ -289,11 +301,12 @@ window.addEventListener('keydown', (e) => {
 });
 
 const playGame = () => {
+	console.log(draw_head, draw_body);
 	setInterval(function () {
 		draw_game_board();
 		draw_apple();
-		draw_body();
-		draw_head();
+		draw_body(ctx, snake, snakeBody, snake_position);
+		draw_head(ctx, snake, snakeBody, snake_position);
 		boundary_check();
 		apple_check();
 		body_check();
